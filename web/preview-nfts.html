@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcMiner NFT Previews</title>
+    <style>
+        body {
+            background-color: #0b0e14;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .nft-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 300px;
+        }
+        .nft-card h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        svg {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ArcMiner On-Chain SVG Previews</h1>
+    <p>This is exactly how the smart contract will generate the images for the users.</p>
+    
+    <div class="container">
+        
+        <!-- LEGENDARY -->
+        <div class="nft-card">
+            <h3 style="color:#d7a51f">Legendary (Zhar Kbir)</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" shape-rendering="crispEdges">
+                <rect width="800" height="800" fill="#10141c"/>
+                <rect x="130" y="150" width="540" height="500" fill="#d7a51f" stroke="#05070a" stroke-width="20"/>
+                <rect x="110" y="210" width="230" height="190" fill="#111"/>
+                <rect x="110" y="420" width="230" height="190" fill="#111"/>
+                <circle cx="225" cy="305" r="78" fill="none" stroke="#e8edf2" stroke-width="14"/>
+                <circle cx="225" cy="515" r="78" fill="none" stroke="#e8edf2" stroke-width="14"/>
+                <path d="M440 300 Q500 180 560 300 L520 300 Q500 245 480 300 Z" fill="#24243e"/>
+                <text x="405" y="390" font-family="monospace" font-size="44" font-weight="700" fill="#151820">ARCMINER</text>
+                <text x="405" y="450" font-family="monospace" font-size="28" fill="#151820">Legendary</text>
+                <text x="405" y="500" font-family="monospace" font-size="24" fill="#151820">WORK 42 BITS</text>
+                <text x="405" y="540" font-family="monospace" font-size="24" fill="#151820">EPOCH 0</text>
+            </svg>
+        </div>
+
+        <!-- RARE -->
+        <div class="nft-card">
+            <h3 style="color:#1976d2">Rare (Zhar Mtwst)</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" shape-rendering="crispEdges">
+                <rect width="800" height="800" fill="#10141c"/>
+                <rect x="130" y="150" width="540" height="500" fill="#1976d2" stroke="#05070a" stroke-width="20"/>
+                <rect x="110" y="210" width="230" height="190" fill="#111"/>
+                <rect x="110" y="420" width="230" height="190" fill="#111"/>
+                <circle cx="225" cy="305" r="78" fill="none" stroke="#e8edf2" stroke-width="14"/>
+                <circle cx="225" cy="515" r="78" fill="none" stroke="#e8edf2" stroke-width="14"/>
+                <path d="M440 300 Q500 180 560 300 L520 300 Q500 245 480 300 Z" fill="#24243e"/>
+                <text x="405" y="390" font-family="monospace" font-size="44" font-weight="700" fill="#151820">ARCMINER</text>
+                <text x="405" y="450" font-family="monospace" font-size="28" fill="#151820">Rare</text>
+                <text x="405" y="500" font-family="monospace" font-size="24" fill="#151820">WORK 38 BITS</text>
+                <text x="405" y="540" font-family="monospace" font-size="24" fill="#151820">EPOCH 1</text>
+            </svg>
+        </div>
+
+        <!-- COMMON -->
+        <div class="nft-card">
+            <h3 style="color:#bfc5cc">Common (L'3adi)</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" shape-rendering="crispEdges">
+                <rect width="800" height="800" fill="#10141c"/>
+                <rect x="130" y="150" width="540" height="500" fill="#bfc5cc" stroke="#05070a" stroke-width="20"/>
+                <rect x="110" y="210" width="230" height="190" fill="#111"/>
+                <rect x="110" y="420" width="230" height="190" fill="#111"/>
+                <circle cx="225" cy="305" r="78" fill="none" stroke="#e8edf2" stroke-width="14"/>
+                <circle cx="225" cy="515" r="78" fill="none" stroke="#e8edf2" stroke-width="14"/>
+                <path d="M440 300 Q500 180 560 300 L520 300 Q500 245 480 300 Z" fill="#24243e"/>
+                <text x="405" y="390" font-family="monospace" font-size="44" font-weight="700" fill="#151820">ARCMINER</text>
+                <text x="405" y="450" font-family="monospace" font-size="28" fill="#151820">Common</text>
+                <text x="405" y="500" font-family="monospace" font-size="24" fill="#151820">WORK 35 BITS</text>
+                <text x="405" y="540" font-family="monospace" font-size="24" fill="#151820">EPOCH 3</text>
+            </svg>
+        </div>
+
+    </div>
+</body>
+</html>

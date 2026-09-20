@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ARCMINER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+    <div id="toast-container"></div>
+    <header>
+        <div class="logo">
+            <img src="assets/logo-transparent.png?v=4" alt="ARCMINER" style="width: 200px; height: auto; border-radius: 0;">
+        </div>
+        <nav>
+            <button class="nav-btn active" data-target="page-miner">MINE</button>
+            <button class="nav-btn" data-target="page-collection">COLLECTION</button>
+            <button class="nav-btn" data-target="page-how">HOW TO MINE</button>
+            <button class="nav-btn" data-target="page-pool">$ARCM</button>
+            <button class="nav-btn" data-target="page-stake">STAKE</button>
+            <button class="nav-btn" data-target="page-rules">DOCS</button>
+        </nav>
+        <div style="position: relative; display: inline-block;">
+            <button id="connect" class="btn-primary" style="min-width: 200px;">CONNECT WALLET</button>
+            <div id="profile-menu" style="display: none; position: absolute; right: 0; top: 120%; background: #0f172a; border: 4px solid #1f2937; padding: 15px; width: 100%; box-shadow: 4px 4px 0 #000; z-index: 100;">
+                <div style="margin-bottom: 15px; cursor: pointer; color: #f8fafc; font-size: 14px; display: flex; justify-content: space-between; align-items: center;" onclick="document.querySelector('[data-target=\'page-collection\']').click(); document.getElementById('profile-menu').style.display='none';">
+                    <span>PROFILE</span><span style="color:#64748b;">></span>
+                </div>
+                <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; color: #f8fafc; font-size: 14px;">
+                    <span>SOUND</span>
+                    <div style="background: #1f2937; padding: 2px 5px;">
+                        <span id="sound-on" style="color: #a3e635; cursor: pointer; margin-right: 10px;">ON</span>
+                        <span id="sound-off" style="color: #64748b; cursor: pointer;">OFF</span>
+                    </div>
+                </div>
+                <div id="disconnect-btn" style="color: #ef4444; font-size: 14px; cursor: pointer; border-top: 2px dashed #1f2937; padding-top: 15px; display: flex; justify-content: space-between;">
+                    <span>DISCONNECT</span><span>✖</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HOW TO MINE PAGE -->
+        <div id="page-how" class="page">
+            <div class="panel docs">
+                <h2 style="font-size:24px; color:#facc15; margin-bottom: 20px;">HOW TO MINE ARCMINER</h2>
+                
+                <div class="rules-box" style="border-color: #a3e635;">
+                    <h3 style="color: #a3e635;">1. Web & Mobile Mining (Easy) 📱</h3>
+                    <p style="margin-bottom: 15px;">You don't need a high-end PC to mine ARCMINER. The Web Miner runs flawlessly on smartphones and laptops!</p>
+                    <ul>
+                        <li><b>How it works:</b> Simply open the website on your iPhone (Safari), Android (Chrome), or PC. Connect your wallet (MetaMask) and click "START MINING".</li>
+                        <li><b>Hardware:</b> Your device's processor will compute Keccak256 hashes in the background using JavaScript Web Workers.</li>
+                        <li><b>Important for Mobile:</b> Mobile operating systems will pause the browser if your screen turns off. To keep mining, you must leave the browser tab open and your phone's screen ON.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box" style="margin-top:20px; border-color: #38bdf8;">
+                    <h3 style="color: #38bdf8; margin-bottom: 15px;">2. PRO Mining: Python CLI (GPU Support) 🖥️</h3>
+                    <img src="assets/gpu-rig.jpg" alt="GPU Mining Rig" style="width: 100%; height: auto; border: 4px solid #1f2937; margin-bottom: 15px; box-shadow: 4px 4px 0px #000;">
+                    <p style="margin-bottom: 15px;">For users with dedicated GPUs (NVIDIA/AMD/Intel) who want maximum Hashrate, we provide an advanced Python CLI Miner.</p>
+                    <ul>
+                        <li><b>Step 1:</b> Download the <a href="assets/arcminer-cli.py" target="_blank" style="color: #facc15; text-decoration: underline;">arcminer-cli.py</a> script.</li>
+                        <li><b>Step 2:</b> Install Python dependencies by running: <br><code style="font-size:16px;">pip install web3 pyopencl</code></li>
+                        <li><b>Step 3:</b> Run the miner using: <br><code style="font-size:16px;">python arcminer-cli.py</code></li>
+                        <li><b>Auto-Minting:</b> When prompted, paste your private key. The CLI will automatically use PyOpenCL to blast through hashes on your GPU and submit the minting transaction immediately when a valid hash is found.</li>
+                        <li><b>Security Note:</b> Never share your private key. The CLI runs 100% locally on your machine.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box" style="margin-top:20px; border-color: #f43f5e;">
+                    <h3 style="color: #f43f5e;">3. Co-Op / Mining Pools (Team up!) 🤝</h3>
+                    <p style="margin-bottom: 15px;">Want to multiply your hash rate? You can team up with friends to mine the same NFT faster!</p>
+                    <ul>
+                        <li><b>The Shared Wallet Strategy:</b> Create a brand new MetaMask wallet specifically for mining and fund it with some USDC for gas.</li>
+                        <li><b>Distribute the Key:</b> Share this new wallet's Private Key securely with your trusted friends.</li>
+                        <li><b>Massive Hashrate:</b> Everyone runs the `arcminer-cli.py` script on their own computers using that same Private Key. Your combined GPUs will all hunt for the exact same hash!</li>
+                        <li><b>The Reward:</b> When any of the computers finds the hash, the script will automatically mint the NFT into that shared wallet. You can then sell it and split the profits!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MINER PAGE (DASHBOARD) -->
+        <div id="page-miner" class="page active">
+            
+            <!-- HERO / SHOWCASE SECTION -->
+            <div style="margin-bottom: 40px;">
+                <img src="assets/rigs-banner.jpg" alt="ARCMINER Rigs" style="width: 100%; height: auto; border: 4px solid #1f2937; box-shadow: 8px 8px 0px #000; margin-bottom: 25px;">
+                
+                <h2 style="font-size: 24px; color: #f8fafc; margin-bottom: 15px; line-height: 1.4; text-align: center;">MINE THE MACHINE.</h2>
+                <p style="color:#94a3b8; font-size:24px; line-height:1.4; margin-bottom:25px; text-align: center; font-family: 'VT323', monospace;">
+                    Your hardware hashes until one result lands below the target difficulty. Almost all of them are above it and get away. The one that is not buys you an <b>ARCMINER</b> — fully on-chain metadata driven by raw entropy.
+                </p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                    <span style="background: #111827; border: 4px solid #1e2937; color: #38bdf8; padding: 12px 18px; font-size: 14px; font-family: 'Press Start 2P', cursive;">CPU / GPU MINING</span>
+                    <span style="background: #111827; border: 4px solid #1e2937; color: #facc15; padding: 12px 18px; font-size: 14px; font-family: 'Press Start 2P', cursive;">MAX SUPPLY: 7,777</span>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- LEFT: PERSONAL MINING -->
+                <div class="panel locked-container">
+                    <div class="locked-overlay" id="launch-countdown-overlay" style="display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:50;">
+                        <h3 style="font-size: 20px; margin-bottom: 20px; color: #f8fafc; text-align: center; line-height: 1.5;">EPOCH 0 LAUNCHES IN</h3>
+                        <div id="countdown-timer" style="font-size: 28px; color: #a3e635; font-family: 'Press Start 2P', cursive; text-shadow: 4px 4px 0 #000; letter-spacing: 2px; text-align: center;">
+                            05d 00h 00m 00s
+                        </div>
+                        <p style="margin-top: 20px; font-size: 10px; color: #94a3b8; font-family: 'Press Start 2P', cursive;">Prepare your rigs.</p>
+                    </div>
+
+                    <!-- VISUALIZER -->
+                    <div style="margin-bottom: 25px; border-bottom: 2px dashed #1f2937; padding-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color:#94a3b8; font-size:12px;">LAST ARCMINER MINED</span>
+                            <span style="color:#facc15; font-size:12px;" id="last-bits-display">-- / 256 BITS</span>
+                        </div>
+                        <div id="last-mined-palette" style="display: flex; gap: 2px; margin-bottom: 10px; height: 16px; width: 100%;">
+                            <!-- JS fills 64 blocks -->
+                        </div>
+                        <div id="last-mined-hash" style="color:#f8fafc; font-size:9px; font-family:'Press Start 2P', cursive; word-break: break-all; margin-bottom: 25px; line-height: 1.6;">
+                            0x...
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color:#94a3b8; font-size:12px;">TARGET TO BEAT</span>
+                            <span style="color:#a3e635; font-size:12px;" id="target-bits-display">-- LEADING ZERO BITS</span>
+                        </div>
+                        <div id="target-palette" style="display: flex; gap: 2px; height: 16px; width: 100%;">
+                            <!-- JS fills 64 blocks -->
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                        <div>
+                            <h3 style="color:#f8fafc; font-size:22px; margin:0;">Miner <span id="miner-state" style="color:#64748b; font-size:16px; font-weight:normal;">Idle</span></h3>
+                        </div>
+                        <button id="cpu" class="btn-primary" disabled>START MINING</button>
+                    </div>
+
+                    <div class="stats-box-grid">
+                        <div class="stat-box"><span>Speed</span><strong id="speed-val">0 H/s</strong></div>
+                        <div class="stat-box"><span>Hashes seen</span><strong id="hashes-seen">0</strong></div>
+                        <div class="stat-box"><span>Expected wait</span><strong id="exp-wait">&mdash;</strong></div>
+                        <div class="stat-box"><span>Next costs</span><strong id="next-cost">... USDC</strong></div>
+                    </div>
+
+                    <div class="mt-20" style="background:#0a0a0a; border:4px solid #1f2937; padding:20px; box-shadow: 4px 4px 0 #000;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:20px; align-items:center;">
+                            <span style="color:#94a3b8; font-size:24px;">Machine</span>
+                            <div style="display: flex; background: #000; border: 4px solid #1f2937; box-shadow: 4px 4px 0 #000;">
+                                <button id="btn-cpu" style="background: #2563eb; color: white; border: none; padding: 10px 15px; font-size: 10px; cursor: pointer; font-family: 'Press Start 2P', cursive;">CPU</button>
+                                <button id="btn-gpu" style="background: transparent; color: #64748b; border: none; padding: 10px 15px; font-size: 10px; cursor: pointer; font-family: 'Press Start 2P', cursive;">GPU</button>
+                            </div>
+                        </div>
+
+                        <div id="cpu-controls">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                <span style="color:#94a3b8; font-size:24px;">Cores to use:</span>
+                                <span style="color:#38bdf8; font-size: 14px; font-family: 'Press Start 2P', cursive;" id="core-count">1</span>
+                            </div>
+                            <input type="range" id="core-slider" min="1" max="16" value="1" style="width:100%; cursor:pointer;">
+                        </div>
+
+                        <div id="gpu-controls" style="display: none; padding: 10px 0;">
+                            <div style="display:flex; flex-direction:column; gap:10px;">
+                                <span style="color:#94a3b8; font-size:24px;">Graphics Card</span>
+                                <span style="color:#a3e635; font-size: 10px; font-family: 'Press Start 2P', cursive; line-height: 1.6;" id="gpu-name">Detecting...</span>
+                            </div>
+                            <p style="color: #64748b; font-size: 20px; margin-top: 20px; line-height: 1.2;">WebGL Hardware Acceleration Enabled.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: NETWORK & EPOCH -->
+                <div class="panel">
+                    <h3 style="color:#f8fafc; font-size:20px; margin-bottom: 20px;">Network & Epoch</h3>
+                    <div class="stats-box-grid">
+                        <div class="stat-box"><span>Difficulty</span><strong id="net-diff">... bits</strong></div>
+                        <div class="stat-box"><span>Mined</span><strong id="net-mined">... / 7777</strong></div>
+                        <div class="stat-box"><span>Epoch</span><strong id="net-epoch">...</strong></div>
+                        <div class="stat-box"><span>To next epoch</span><strong id="net-left">...</strong></div>
+                    </div>
+                    
+                    <div class="mt-20" style="background:#0a0a0a; border:4px solid #1f2937; padding:20px; box-shadow: 4px 4px 0 #000;">
+                        <span style="color:#94a3b8; font-size:24px;">Anchor Hash</span>
+                        <div id="net-anchor" style="color:#a3e635; font-size:24px; margin-top:10px; word-break:break-all; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.6;">...</div>
+                        <p style="color:#64748b; font-size:20px; margin-top:15px; line-height: 1.2;">
+                            Hash of a recent block. Valid for ~25s. Your address is part of the work, so nobody can copy your solution out of the mempool.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHART: HASHES BY BITS -->
+            <div class="panel mt-20">
+                <h3 style="color:#f8fafc; font-size:18px; margin-bottom:5px;">Hashes by leading zero bits</h3>
+                <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Hashes that got away. One floor = twice the work.</p>
+                <div class="hash-chart" id="hash-chart">
+                    <!-- JS will fill this with bars -->
+                </div>
+                <div class="chart-axis">
+                    <span>0</span><span>4</span><span>8</span><span>12</span><span>16</span><span>20</span><span>24</span><span>28</span><span>32</span>
+                </div>
+            </div>
+
+            <!-- LATEST MINTS FEED -->
+            <div class="panel mt-20">
+                <h3 style="color:#f8fafc; font-size:18px; margin-bottom:15px;">Latest Mints</h3>
+                <div class="mint-feed" id="latest-mints">
+                    <div style="color:#64748b; font-size:13px;">Waiting for network connection...</div>
+                </div>
+            </div>
+            
+            <!-- RICH LORE & FEATURES SECTION -->
+            <div class="rich-features-section" style="margin-top: 60px;">
+                <h2 style="font-size: 24px; color: #f8fafc; text-align: center; margin-bottom: 40px; border-bottom: 4px solid #1f2937; padding-bottom: 20px;">WHY ARCMINER?</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <img src="assets/rare.jpeg" style="width:100%; border:4px solid #1f2937; box-shadow:4px 4px 0 #000; margin-bottom:15px;" onerror="this.style.display='none'">
+                        <h3 style="color:#38bdf8;">100% ON-CHAIN</h3>
+                        <p>No IPFS, no external servers. The metadata, rarity logic, and SVG rendering are entirely built into the Arc smart contracts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="assets/legendary.jpeg" style="width:100%; border:4px solid #1f2937; box-shadow:4px 4px 0 #000; margin-bottom:15px;" onerror="this.style.display='none'">
+                        <h3 style="color:#facc15;">HYPER DEFLATION</h3>
+                        <p>Burn 2 Common miners to Forge a Rare. Burn any miner to extract $ARCM liquidity instantly. The supply only goes DOWN.</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="assets/common.jpeg" style="width:100%; border:4px solid #1f2937; box-shadow:4px 4px 0 #000; margin-bottom:15px;" onerror="this.style.display='none'">
+                        <h3 style="color:#bfc5cc;">REVENUE SHARE</h3>
+                        <p>Stake your $ARCM protocol tokens to earn a share of every single mint and swap fee generated on the platform.</p>
+                    </div>
+                </div>
+
+                <div class="lore-box mt-20" style="background:#000; border:4px solid #334155; padding:30px; box-shadow:8px 8px 0 #000; margin-top:40px;">
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div style="flex:1; min-width: 300px;">
+                            <h2 style="color: #a3e635; margin-bottom: 20px; font-size: 24px;">THE LORE</h2>
+                            <p style="color: #94a3b8; font-family: 'VT323', monospace; font-size: 28px; line-height: 1.4; margin-bottom: 20px;">
+                                In the depths of the Arc blockchain, the Hash algorithm waits. Only 7,777 ArcMiners will ever be forged from the raw Keccak256 entropy. The mining rigs hum, CPUs heat up, and the difficulty exponentially climbs. Once they are gone, the only way to get one is to buy it, or Forge it. Welcome to the hardest PoW NFT on Arc.
+                            </p>
+                            <img src="assets/server-room.jpg" alt="Server Room" style="width: 100%; border: 4px solid #1f2937; box-shadow: 4px 4px 0px #000;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- COLLECTION PAGE -->
+        <div id="page-collection" class="page">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h2>MY COLLECTION</h2>
+                        <p>View your mined ARCMINER NFTs and manage them.</p>
+                        <h3 id="collection-count" style="color: #a3e635; margin-top: 15px; font-size: 14px;">You hold: 0 ARCMINER(s)</h3>
+                    </div>
+                    <div>
+                        <button class="btn-primary" id="forge-btn" style="background: #8b5cf6;">🔨 FORGE (Burn 2 Common -> 1 Rare)</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn-secondary" id="refresh-collection">REFRESH</button>
+                </div>
+                <div class="collection-grid" id="nft-grid">
+                    <div class="empty-state">No NFTs found. Start mining to get one!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POOL PAGE -->
+        <div id="page-pool" class="page">
+            <div class="panel swap-panel locked-container">
+                <div class="locked-overlay" id="pool-lock">
+                    <h3>🔒 LIQUIDITY LOCKED</h3>
+                    <p>The $ARCM Swap Pool will automatically open once 1,000 ARCMINERs have been minted.<br><br>Current Mints: <span class="lock-progress" style="color: #a3e635;">0</span> / 1000</p>
+                </div>
+                <h2>ARCM SWAP POOL</h2>
+                <p>Trade your $ARCM tokens for native Arc USDC.</p>
+                <div class="swap-box">
+                    <label id="arcm-bal-label">You Pay ($ARCM)</label>
+                    <input type="number" id="swap-amount" placeholder="0.0" disabled>
+                </div>
+                <div class="swap-icon">↓</div>
+                <div class="swap-box">
+                    <label>You Receive (USDC)</label>
+                    <input type="text" id="receive-amount" placeholder="0.0" disabled>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <button id="swap-btn" class="btn-primary w-full" disabled>SWAP DISABLED</button>
+                </div>
+                <p class="fee-text">Pool Fee: 2.5% | Built-in Market Maker</p>
+            </div>
+        </div>
+
+        <!-- STAKE PAGE -->
+        <div id="page-stake" class="page">
+            <div class="panel locked-container" style="max-width: 600px; margin: 0 auto;">
+                <div class="locked-overlay" id="stake-lock">
+                    <h3>🔒 STAKING LOCKED</h3>
+                    <p>Revenue distribution starts when the Swap Pool opens at 1,000 mints.<br><br>Current Mints: <span class="lock-progress" style="color: #a3e635;">0</span> / 1000</p>
+                </div>
+                <h2 style="text-align: center; margin-bottom: 5px;">$ARCM STAKING</h2>
+                <p style="text-align: center; color:#94a3b8; font-size:14px; margin-bottom: 20px;">Stake $ARCM to earn a share of network fees.</p>
+                
+                <img src="assets/server-rack.jpg" alt="Server Rack" style="width: 100%; height: auto; border: 4px solid #1f2937; margin-bottom: 25px; box-shadow: 6px 6px 0px #000;">
+
+                <div class="stats-box-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 25px;">
+                    <div class="stat-box" style="text-align: center;">
+                        <span>Your Staked $ARCM</span>
+                        <strong id="staked-bal" style="color: #facc15;">0.00</strong>
+                    </div>
+                    <div class="stat-box" style="text-align: center;">
+                        <span>Earned Rewards</span>
+                        <strong id="earned-rewards" style="color: #38bdf8;">0.00</strong>
+                        <button class="btn-primary" id="claim-rewards-btn" style="margin-top: 15px; width: 100%; font-size: 10px; padding: 10px;">CLAIM</button>
+                    </div>
+                </div>
+
+                <div class="swap-box" style="margin-bottom: 20px;">
+                    <label style="display: flex; justify-content: space-between;">
+                        <span>Amount</span>
+                        <span id="wallet-arcm-bal" style="color: #38bdf8; cursor: pointer;">Wallet: 0.00 ARCM</span>
+                    </label>
+                    <input type="number" id="stake-amount" placeholder="0.0" disabled>
+                </div>
+                
+                <div style="display: flex; gap: 15px;">
+                    <button id="stake-btn" class="btn-primary" style="flex: 1;" disabled>STAKE</button>
+                    <button id="unstake-btn" class="btn-secondary" style="flex: 1;" disabled>UNSTAKE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCS PAGE -->
+        <div id="page-rules" class="page">
+            <div class="panel docs">
+                <h2>ARCMINER DOCUMENTATION & ROADMAP</h2>
+                
+                <div class="rules-box">
+                    <h3>1. The Utility (Why Mine?)</h3>
+                    <ul>
+                        <li><b>Proof of Work on Arc:</b> Use your browser's CPU/GPU to find a hash below the target difficulty. If you succeed, you mint an ArcMiner NFT.</li>
+                        <li><b>Passive $ARCM Yield:</b> Every minted NFT automatically accumulates $ARCM tokens over time (Rent). You can claim this at any time in the "Collection" tab.</li>
+                        <li><b>Deflationary Burning:</b> Don't want your NFT anymore? Burn it to receive a massive lump sum of $ARCM instantly.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box" style="margin-top:20px; border-color: #d7a51f;">
+                    <h3 style="color: #d7a51f;">2. The Roadmap</h3>
+                    
+                    <h4>📍 Phase 1: Launch & Distribution (CURRENT)</h4>
+                    <ul>
+                        <li>Deploy Browser Miner & Smart Contracts on Arc Mainnet.</li>
+                        <li>Fair launch of the 7,777 NFT Supply.</li>
+                        <li>Initialize $ARCM / USDC Swap Pool with auto-liquidity.</li>
+                    </ul>
+
+                    <h4>📍 Phase 2: Staking & Revenue Share</h4>
+                    <ul>
+                        <li>Launch the <b>$ARCM Staking Dashboard</b>.</li>
+                        <li>Stakers earn 100% of the protocol fees generated from the Swap Pool (2.5% fee on all swaps).</li>
+                        <li>Holders can stake their NFTs to multiply their $ARCM yield.</li>
+                    </ul>
+
+                    <h4>📍 Phase 3: The Forge (Deflation)</h4>
+                    <ul>
+                        <li>Burn 2 <b>Common</b> ArcMiners to forge 1 <b>Rare</b> ArcMiner.</li>
+                        <li>Spend $ARCM to "Overclock" your NFTs and boost their Hash Rate multiplier.</li>
+                        <li>Makes the collection hyper-deflationary.</li>
+                    </ul>
+
+                    <h4>📍 Phase 4: Arc Ecosystem GameFi</h4>
+                    <ul>
+                        <li>Integration with Arc gaming ecosystems.</li>
+                        <li>Your ArcMiners become usable hardware in the Metaverse.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box">
+                    <h3>3. Network Setup</h3>
+                    <div style="display: flex; gap: 20px; margin-top: 15px; flex-wrap: wrap;">
+                        <div class="step-card">
+                            <div class="step-num">1.</div>
+                            <h4>Add Arc Network</h4>
+                            <p>Network Name: Arc Mainnet<br>RPC URL: https://rpc.mainnet.arc.io<br>Chain ID: 5042<br>Currency: USDC</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">2.</div>
+                            <h4>Bridge USDC</h4>
+                            <p>Bridge your USDC to Arc Mainnet to pay for gas.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">3.</div>
+                            <h4>Start Mining</h4>
+                            <p>Simply click the "START MINING" button in the Miner tab to use your browser's power to mine ARCMINER NFTs!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>4. HOW MINING WORKS</h3>
+                    <p style="margin-bottom: 15px;">ARCMINER uses a <b>Proof-of-Work (PoW)</b> mechanism using the Keccak256 algorithm. To mint an NFT, your machine must solve a cryptographic puzzle directly in your browser.</p>
+                    <ul>
+                        <li><b>Algorithm:</b> <code>keccak256(abi.encodePacked(miner, nonce, prevWork, anchorHash))</code></li>
+                        <li><b>Difficulty:</b> The network dynamically adjusts the difficulty every 8 successful mints to target a 10-second mint pace.</li>
+                        <li><b>Rarity:</b> Your NFT's rarity depends on how "lucky" your hash is compared to the minimum required work. <br>
+                        <i>Common (+0..3 bits) | Rare (+4..7 bits) | Legendary (+8+ bits)</i></li>
+                    </ul>
+                </div>
+
+                <div class="rules-box">
+                    <h3>5. EPOCHS & PRICING</h3>
+                    <p>There is a strict maximum supply of <b>7,777 NFTs</b>. The mint price increases as more NFTs are mined, divided into "Epochs".</p>
+                    <ul>
+                        <li><b>Epoch 0:</b> The first 8 mints cost exactly <b>1 USDC</b>.</li>
+                        <li><b>Later Epochs:</b> The epoch size doubles each time (8, 16, 32, 64...). The price increases proportionally based on the ArcMiner tokenomics ratio.</li>
+                        <li><b>Rent Distribution:</b> 70% of the mint price is distributed to existing NFT holders as "Rent". 30% goes to the protocol treasury.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box">
+                    <h3>6. BURN & $ARCM TOKEN</h3>
+                    <p style="margin-bottom: 15px;">ARCMINER NFTs can be burned to extract the underlying <b>$ARCM</b> protocol tokens.</p>
+                    <ul>
+                        <li><b>Minimum Age:</b> An NFT must be at least 10 minutes old before it can be burned.</li>
+                        <li><b>Rewards:</b> A fresh burn yields <b>1,000 $ARCM</b>. Older NFT burn rewards decay based on how many epochs have passed since it was minted.</li>
+                        <li><b>Liquidity Pool:</b> You can instantly trade your $ARCM for USDC using the built-in decentralized swap pool on the "ARCM POOL" tab (2.5% fee).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+                            <p style="color: #94a3b8; font-family: 'VT323', monospace; font-size: 28px; line-height: 1.4; margin-bottom: 20px;">
+                                In the depths of the Arc blockchain, the Hash algorithm waits. Only 7,777 ArcMiners will ever be forged from the raw Keccak256 entropy. The mining rigs hum, CPUs heat up, and the difficulty exponentially climbs. Once they are gone, the only way to get one is to buy it, or Forge it. Welcome to the hardest PoW NFT on Arc.
+                            </p>
+                            <img src="assets/server-room.jpg" alt="Server Room" style="width: 100%; border: 4px solid #1f2937; box-shadow: 4px 4px 0px #000;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- COLLECTION PAGE -->
+        <div id="page-collection" class="page">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h2>MY COLLECTION</h2>
+                        <p>View your mined ARCMINER NFTs and manage them.</p>
+                        <h3 id="collection-count" style="color: #a3e635; margin-top: 15px; font-size: 14px;">You hold: 0 ARCMINER(s)</h3>
+                    </div>
+                    <div>
+                        <button class="btn-primary" id="forge-btn" style="background: #8b5cf6;">🔨 FORGE (Burn 2 Common -> 1 Rare)</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn-secondary" id="refresh-collection">REFRESH</button>
+                </div>
+                <div class="collection-grid" id="nft-grid">
+                    <div class="empty-state">No NFTs found. Start mining to get one!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POOL PAGE -->
+        <div id="page-pool" class="page">
+            <div class="panel swap-panel locked-container">
+                <div class="locked-overlay" id="pool-lock">
+                    <h3>🔒 LIQUIDITY LOCKED</h3>
+                    <p>The $ARCM Swap Pool will automatically open once 1,000 ARCMINERs have been minted.<br><br>Current Mints: <span class="lock-progress" style="color: #a3e635;">0</span> / 1000</p>
+                </div>
+                <h2>ARCM SWAP POOL</h2>
+                <p>Trade your $ARCM tokens for native Arc USDC.</p>
+                <div class="swap-box">
+                    <label id="arcm-bal-label">You Pay ($ARCM)</label>
+                    <input type="number" id="swap-amount" placeholder="0.0" disabled>
+                </div>
+                <div class="swap-icon">↓</div>
+                <div class="swap-box">
+                    <label>You Receive (USDC)</label>
+                    <input type="text" id="receive-amount" placeholder="0.0" disabled>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <button id="swap-btn" class="btn-primary w-full" disabled>SWAP DISABLED</button>
+                </div>
+                <p class="fee-text">Pool Fee: 2.5% | Built-in Market Maker</p>
+            </div>
+        </div>
+
+        <!-- STAKE PAGE -->
+        <div id="page-stake" class="page">
+            <div class="panel locked-container" style="max-width: 600px; margin: 0 auto;">
+                <div class="locked-overlay" id="stake-lock">
+                    <h3>🔒 STAKING LOCKED</h3>
+                    <p>Revenue distribution starts when the Swap Pool opens at 1,000 mints.<br><br>Current Mints: <span class="lock-progress" style="color: #a3e635;">0</span> / 1000</p>
+                </div>
+                <h2 style="text-align: center; margin-bottom: 5px;">$ARCM STAKING</h2>
+                <p style="text-align: center; color:#94a3b8; font-size:14px; margin-bottom: 20px;">Stake $ARCM to earn a share of network fees.</p>
+                
+                <img src="assets/server-rack.jpg" alt="Server Rack" style="width: 100%; height: auto; border: 4px solid #1f2937; margin-bottom: 25px; box-shadow: 6px 6px 0px #000;">
+
+                <div class="stats-box-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 25px;">
+                    <div class="stat-box" style="text-align: center;">
+                        <span>Your Staked $ARCM</span>
+                        <strong id="staked-bal" style="color: #facc15;">0.00</strong>
+                    </div>
+                    <div class="stat-box" style="text-align: center;">
+                        <span>Earned Rewards</span>
+                        <strong id="earned-rewards" style="color: #38bdf8;">0.00</strong>
+                        <button class="btn-primary" id="claim-rewards-btn" style="margin-top: 15px; width: 100%; font-size: 10px; padding: 10px;">CLAIM</button>
+                    </div>
+                </div>
+
+                <div class="swap-box" style="margin-bottom: 20px;">
+                    <label style="display: flex; justify-content: space-between;">
+                        <span>Amount</span>
+                        <span id="wallet-arcm-bal" style="color: #38bdf8; cursor: pointer;">Wallet: 0.00 ARCM</span>
+                    </label>
+                    <input type="number" id="stake-amount" placeholder="0.0" disabled>
+                </div>
+                
+                <div style="display: flex; gap: 15px;">
+                    <button id="stake-btn" class="btn-primary" style="flex: 1;" disabled>STAKE</button>
+                    <button id="unstake-btn" class="btn-secondary" style="flex: 1;" disabled>UNSTAKE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCS PAGE -->
+        <div id="page-rules" class="page">
+            <div class="panel docs">
+                <h2>ARCMINER DOCUMENTATION & ROADMAP</h2>
+                
+                <div class="rules-box">
+                    <h3>1. The Utility (Why Mine?)</h3>
+                    <ul>
+                        <li><b>Proof of Work on Arc:</b> Use your browser's CPU/GPU to find a hash below the target difficulty. If you succeed, you mint an ArcMiner NFT.</li>
+                        <li><b>Passive $ARCM Yield:</b> Every minted NFT automatically accumulates $ARCM tokens over time (Rent). You can claim this at any time in the "Collection" tab.</li>
+                        <li><b>Deflationary Burning:</b> Don't want your NFT anymore? Burn it to receive a massive lump sum of $ARCM instantly.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box" style="margin-top:20px; border-color: #d7a51f;">
+                    <h3 style="color: #d7a51f;">2. The Roadmap</h3>
+                    
+                    <h4>📍 Phase 1: Launch & Distribution (CURRENT)</h4>
+                    <ul>
+                        <li>Deploy Browser Miner & Smart Contracts on Arc Mainnet.</li>
+                        <li>Fair launch of the 7,777 NFT Supply.</li>
+                        <li>Initialize $ARCM / USDC Swap Pool with auto-liquidity.</li>
+                    </ul>
+
+                    <h4>📍 Phase 2: Staking & Revenue Share</h4>
+                    <ul>
+                        <li>Launch the <b>$ARCM Staking Dashboard</b>.</li>
+                        <li>Stakers earn 100% of the protocol fees generated from the Swap Pool (2.5% fee on all swaps).</li>
+                        <li>Holders can stake their NFTs to multiply their $ARCM yield.</li>
+                    </ul>
+
+                    <h4>📍 Phase 3: The Forge (Deflation)</h4>
+                    <ul>
+                        <li>Burn 2 <b>Common</b> ArcMiners to forge 1 <b>Rare</b> ArcMiner.</li>
+                        <li>Spend $ARCM to "Overclock" your NFTs and boost their Hash Rate multiplier.</li>
+                        <li>Makes the collection hyper-deflationary.</li>
+                    </ul>
+
+                    <h4>📍 Phase 4: Arc Ecosystem GameFi</h4>
+                    <ul>
+                        <li>Integration with Arc gaming ecosystems.</li>
+                        <li>Your ArcMiners become usable hardware in the Metaverse.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box">
+                    <h3>3. Network Setup</h3>
+                    <div style="display: flex; gap: 20px; margin-top: 15px; flex-wrap: wrap;">
+                        <div class="step-card">
+                            <div class="step-num">1.</div>
+                            <h4>Add Arc Network</h4>
+                            <p>Network Name: Arc Mainnet<br>RPC URL: https://rpc.mainnet.arc.io<br>Chain ID: 5042<br>Currency: USDC</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">2.</div>
+                            <h4>Bridge USDC</h4>
+                            <p>Bridge your USDC to Arc Mainnet to pay for gas.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">3.</div>
+                            <h4>Start Mining</h4>
+                            <p>Simply click the "START MINING" button in the Miner tab to use your browser's power to mine ARCMINER NFTs!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rules-box">
+                    <h3>4. HOW MINING WORKS</h3>
+                    <p style="margin-bottom: 15px;">ARCMINER uses a <b>Proof-of-Work (PoW)</b> mechanism using the Keccak256 algorithm. To mint an NFT, your machine must solve a cryptographic puzzle directly in your browser.</p>
+                    <ul>
+                        <li><b>Algorithm:</b> <code>keccak256(abi.encodePacked(miner, nonce, prevWork, anchorHash))</code></li>
+                        <li><b>Difficulty:</b> The network dynamically adjusts the difficulty every 8 successful mints to target a 10-second mint pace.</li>
+                        <li><b>Rarity:</b> Your NFT's rarity depends on how "lucky" your hash is compared to the minimum required work. <br>
+                        <i>Common (+0..3 bits) | Rare (+4..7 bits) | Legendary (+8+ bits)</i></li>
+                    </ul>
+                </div>
+
+                <div class="rules-box">
+                    <h3>5. EPOCHS & PRICING</h3>
+                    <p>There is a strict maximum supply of <b>7,777 NFTs</b>. The mint price increases as more NFTs are mined, divided into "Epochs".</p>
+                    <ul>
+                        <li><b>Epoch 0:</b> The first 8 mints cost exactly <b>1 USDC</b>.</li>
+                        <li><b>Later Epochs:</b> The epoch size doubles each time (8, 16, 32, 64...). The price increases proportionally based on the ArcMiner tokenomics ratio.</li>
+                        <li><b>Rent Distribution:</b> 70% of the mint price is distributed to existing NFT holders as "Rent". 30% goes to the protocol treasury.</li>
+                    </ul>
+                </div>
+
+                <div class="rules-box">
+                    <h3>6. BURN & $ARCM TOKEN</h3>
+                    <p style="margin-bottom: 15px;">ARCMINER NFTs can be burned to extract the underlying <b>$ARCM</b> protocol tokens.</p>
+                    <ul>
+                        <li><b>Minimum Age:</b> An NFT must be at least 10 minutes old before it can be burned.</li>
+                        <li><b>Rewards:</b> A fresh burn yields <b>1,000 $ARCM</b>. Older NFT burn rewards decay based on how many epochs have passed since it was minted.</li>
+                        <li><b>Liquidity Pool:</b> You can instantly trade your $ARCM for USDC using the built-in decentralized swap pool on the "ARCM POOL" tab (2.5% fee).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>ARCMINER V1.0 &bull; Deployed on Arc Mainnet &bull; <a href="https://arc-scan.org/address/0x1a4b7fc5c620c5924019c494f2e591767dddbded" target="_blank" style="color:#38bdf8;text-decoration:none;">View Smart Contract</a></p>
+    </footer>
+    <script type="module" src="app.js?v=24"></script>
+</body>
+</html>

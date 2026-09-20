@@ -1,0 +1,19 @@
+[profile.default]
+src = "contracts"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.24"
+optimizer = true
+optimizer_runs = 100000
+via_ir = true
+
+[fuzz]
+runs = 1024
+
+[rpc_endpoints]
+arc_mainnet = "https://rpc.mainnet.arc.io"
+arc_testnet = "https://rpc.testnet.arc.io"
+
+[etherscan]
+arc_mainnet = { key = "${ARC_API_KEY}", url = "https://explorer.arc.io/api" }
+arc_testnet = { key = "${ARC_API_KEY}", url = "https://explorer.testnet.arc.io/api" }
